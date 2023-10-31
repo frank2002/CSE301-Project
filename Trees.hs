@@ -62,17 +62,29 @@ main = do
   let tree = Node 1 "root" ["a", "b"]
               [ Node 2 "child1" ["c"] 
                 [ Node 6 "grandchild1" ["i"] []
-                , Node 7 "grandchild2" ["j"] []
+                , Node 7 "grandchild2" ["j"] 
+                  [ Node 11 "greatgrandchild1" ["m"] []
+                  , Node 12 "greatgrandchild2" ["n"] []
+                  ]
                 , Node 8 "grandchild3" ["k"] []
                 ]
               , Node 3 "child2" ["d", "e"]
-                [ Node 4 "grandchild1" ["f"] []
-                , Node 5 "grandchild2" ["g", "h"] []
+                [ Node 4 "grandchild1" ["f"] 
+                  [ Node 9 "greatgrandchild1" ["l"] []
+                  ]
+                , Node 5 "grandchild2" ["g", "h"] 
+                  [ Node 10 "greatgrandchild1" ["o"] []
+                  ]
+                ]
+              , Node 13 "child3" ["p", "q"]
+                [ Node 14 "grandchild1" ["r"] []
+                , Node 15 "grandchild2" ["s"] []
                 ]
               ]
-      visitedNodes = [1, 3, 6]
-      current = 5
+      visitedNodes = [1, 2,3,6,7,11,4,5,10]
+      current = 11
   printVisitedTree tree current visitedNodes
+  printGTreePos tree current
 
 -- main :: IO ()
 -- main = do
