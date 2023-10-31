@@ -1,6 +1,7 @@
 module Trees where
 
 import Data.List
+import Data.Maybe (catMaybes)
 import qualified Data.Tree as DT
 import Diagrams (D)
 
@@ -36,6 +37,18 @@ printGTree = putStrLn . DT.drawTree . gTreeToTree
 printGTreePos :: GTree -> GTree -> IO ()
 printGTreePos tree current = putStrLn . DT.drawTree $ gTreeToTreePos current tree
 
+
+filterTree :: GTree -> [Int] -> Maybe GTree
+filterTree (Node n label strings children) indices
+  | n `elem` indices = Just $ Node n label strings (catMaybes $ map (`filterTree` indices) children)
+  | otherwise = Nothing
+filterTree Leaf _ = Just Leaf
+
+printVisitedTree :: GTree -> GTree -> [Int] -> IO ()
+printVisitedTree tree current indices = case filterTree tree indices of
+  Just filteredTree -> printGTreePos filteredTree current
+  Nothing -> putStrLn "The character has not visited any nodes in the tree."
+
 main :: IO ()
 main = do
   let tree = Node 1 "root" ["a", "b"]
@@ -49,7 +62,24 @@ main = do
                 , Node 5 "grandchild2" ["g", "h"] []
                 ]
               ]
+      visitedNodes = [1, 3, 4]
       current = Node 4 "grandchild1" ["f"] []
---   printGTree tree
+  printVisitedTree tree current visitedNodes
 
-  printGTreePos tree current
+-- main :: IO ()
+-- main = do
+--   let tree = Node 1 "root" ["a", "b"]
+--               [ Node 2 "child1" ["c"] 
+--                 [ Node 6 "grandchild1" ["i"] []
+--                 , Node 7 "grandchild2" ["j"] []
+--                 , Node 8 "grandchild3" ["k"] []
+--                 ]
+--               , Node 3 "child2" ["d", "e"]
+--                 [ Node 4 "grandchild1" ["f"] []
+--                 , Node 5 "grandchild2" ["g", "h"] []
+--                 ]
+--               ]
+--       current = Node 4 "grandchild1" ["f"] []
+-- --   printGTree tree
+
+--   printGTreePos tree current
