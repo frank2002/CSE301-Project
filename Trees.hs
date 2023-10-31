@@ -21,20 +21,28 @@ gTreeToTree :: GTree -> DT.Tree String
 gTreeToTree (Node n label strings children) = DT.Node (label ++  " " ++ show strings) (map gTreeToTree children)
 gTreeToTree Leaf = DT.Node "Leaf" []
 
-gTreeToTreePos :: GTree -> GTree -> DT.Tree String
+-- gTreeToTreePos :: GTree -> GTree -> DT.Tree String
+-- gTreeToTreePos current (Node n label strings children) =
+--   let newLabel = if Node n label strings children == current
+--                  then label ++  " " ++ show strings ++ " <--you are here!"
+--                  else label ++  " " ++ show strings
+--   in DT.Node newLabel (map (gTreeToTreePos current) children)
+-- gTreeToTreePos current Leaf =
+--   DT.Node (if Leaf == current then "Leaf <--you" else "Leaf") []
+
+gTreeToTreePos :: Int -> GTree -> DT.Tree String
 gTreeToTreePos current (Node n label strings children) =
-  let newLabel = if Node n label strings children == current
-                 then label ++  " " ++ show strings ++ " <--you are here!"
-                 else label ++  " " ++ show strings
+  let newLabel = if n == current
+                 then label ++ " " ++ show strings ++ " <--you are here!"
+                 else label ++ " " ++ show strings
   in DT.Node newLabel (map (gTreeToTreePos current) children)
-gTreeToTreePos current Leaf =
-  DT.Node (if Leaf == current then "Leaf <--you" else "Leaf") []
+gTreeToTreePos _ Leaf = DT.Node "Leaf" []
 
 -- Print GTree
 printGTree :: GTree -> IO ()
 printGTree = putStrLn . DT.drawTree . gTreeToTree
 
-printGTreePos :: GTree -> GTree -> IO ()
+printGTreePos :: GTree -> Int -> IO ()
 printGTreePos tree current = putStrLn . DT.drawTree $ gTreeToTreePos current tree
 
 
@@ -44,7 +52,7 @@ filterTree (Node n label strings children) indices
   | otherwise = Nothing
 filterTree Leaf _ = Just Leaf
 
-printVisitedTree :: GTree -> GTree -> [Int] -> IO ()
+printVisitedTree :: GTree -> Int -> [Int] -> IO ()
 printVisitedTree tree current indices = case filterTree tree indices of
   Just filteredTree -> printGTreePos filteredTree current
   Nothing -> putStrLn "The character has not visited any nodes in the tree."
@@ -62,8 +70,8 @@ main = do
                 , Node 5 "grandchild2" ["g", "h"] []
                 ]
               ]
-      visitedNodes = [1, 3, 4]
-      current = Node 4 "grandchild1" ["f"] []
+      visitedNodes = [1, 3, 6]
+      current = 5
   printVisitedTree tree current visitedNodes
 
 -- main :: IO ()
@@ -79,7 +87,8 @@ main = do
 --                 , Node 5 "grandchild2" ["g", "h"] []
 --                 ]
 --               ]
---       current = Node 4 "grandchild1" ["f"] []
+--       current = 1
+
 -- --   printGTree tree
 
 --   printGTreePos tree current
