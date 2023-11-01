@@ -57,6 +57,8 @@ printVisitedTree tree current indices = case filterTree tree indices of
   Just filteredTree -> printGTreePos filteredTree current
   Nothing -> putStrLn "The character has not visited any nodes in the tree."
 
+
+-- Example Tree
 main :: IO ()
 main = do
   let tree = Node 1 "root" ["a", "b"]
