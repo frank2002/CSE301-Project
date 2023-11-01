@@ -87,11 +87,6 @@ fightEnemy hero enemy gen roundNumber = do
     return (Just heroAfterAttack)
   else fightEnemy heroAfterAttack enemyAfterAttack gen'' (roundNumber + 1)
 
--- Helper function to print attack information
-printAttack :: String -> Bool -> Hero -> Enemy -> IO ()
-printAttack attacker hit hero enemy = putStrLn $ concat
-  [attacker, ", Hit ", show hit, ", Hero health ", show (totalHealthPoints hero), ", Enemy Health ", show (healthPoints enemy)]
-
 -- Initial Hero
 initialHero :: Hero
 initialHero = Hero {
@@ -139,6 +134,30 @@ testFightEnemy hero enemy gen = do
   case finalHeroMaybe of
     Nothing -> putStrLn "False"
     Just finalHero -> putStrLn $ "Final hero: " ++ show finalHero
+
+testdisplayInfoHero :: Hero -> IO ()
+testdisplayInfoHero hero = do
+   displayInfoHero hero
+
+testdisplayInfoEquipment :: Hero -> IO ()
+testdisplayInfoEquipment hero = do
+   displayInfoEquipment hero
+
+testdisplayInfoEnemy :: Enemy -> IO ()
+testdisplayInfoEnemy enemy = do
+   displayInfoEnemy enemy
+
+testdisplayInfoArmor :: Armor -> IO ()
+testdisplayInfoArmor armor = do
+   displayInfoArmor armor
+
+testdisplayInfoShoe :: Shoe -> IO ()
+testdisplayInfoShoe shoe = do
+   displayInfoShoe shoe
+
+testdisplayInfoWeapon :: Weapon -> IO ()
+testdisplayInfoWeapon weapon = do
+   displayInfoWeapon weapon
 
 -- 主函数，运行测试并打印结果
 -- main :: IO ()

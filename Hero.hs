@@ -12,7 +12,9 @@ module Hero
   totalAttackPower,
   totalHealthPoints,
   totalSpeed,
-  totalDefense
+  totalDefense,
+  displayInfoHero,
+  displayInfoEquipment
 ) where
 
 import Weapons
@@ -65,4 +67,18 @@ changeShoes hero newShoes = hero { currentShoes = newShoes }
 heroIsDead :: Hero -> Bool
 heroIsDead hero = (totalHealthPoints hero) <= 0
 
+--------------------------------------------------------------------
+-- Display information about the hero
+--------------------------------------------------------------------
+displayInfoHero :: Hero -> IO ()
+displayInfoHero hero = do
+  putStrLn $ "------------------------- Hero Stats -------------------------" 
+  putStrLn $ "Attack Power: " ++ show (totalAttackPower hero) ++ ", Health Points: " ++ show (totalHealthPoints hero) ++ ", Speed: " ++ show (totalSpeed hero) ++ ", Defense: " ++ show (totalDefense hero)
 
+--------------------------------------------------------------------
+-- Display information about the equipment
+--------------------------------------------------------------------
+displayInfoEquipment :: Hero -> IO ()
+displayInfoEquipment hero = do
+  putStrLn $ "------------------------- Hero Equipment -------------------------" 
+  putStrLn $ "Weapon: " ++ weaponName (currentWeapon hero) ++ ", Armor: " ++ armorName (currentArmor hero) ++ ", Shoes: " ++ shoeName (currentShoes hero)
