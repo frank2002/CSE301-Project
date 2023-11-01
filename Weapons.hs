@@ -1,12 +1,12 @@
 module Weapons
 (
   Weapon(..)
-  ,fists_weapon
+  ,first_weapon
   ,weapon_list
 ) where
 
 data Weapon = Weapon {weaponDamage:: Int,weaponHitChance :: Float, weaponName :: String } deriving (Show,Eq)
-fists_weapon = Weapon 5 0.6 "Fists Weapon"
+first_weapon = Weapon 5 0.6 "Fists Weapon"
 
 steel_sword = Weapon 10 0.5 "Steel Sword"
 dawn_blade = Weapon 15 0.8 "Dawn Blade"

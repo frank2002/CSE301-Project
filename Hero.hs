@@ -65,14 +65,4 @@ changeShoes hero newShoes = hero { currentShoes = newShoes }
 heroIsDead :: Hero -> Bool
 heroIsDead hero = (totalHealthPoints hero) <= 0
 
--- Initial Hero
-initialHero :: Hero
-initialHero = Hero {
-    baseHealthPoints = 50,
-    baseAttackPower = 10,
-    baseSpeed = 50,
-    baseDefense = 30,
-    currentWeapon = Weapon 0 0.0 "",  -- No weapon initially
-    currentArmor = Armor 0 0 0 "",    -- No armor initially
-    currentShoes = Shoe 0 0 0 0 ""   -- No shoes initially
-}
+
