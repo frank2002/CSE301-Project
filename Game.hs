@@ -1,7 +1,9 @@
+module Game where
+
 import qualified System.Random as SR
 import Data.List
 import Control.Monad
-import qualified Control.Monad.Random as CMR
+-- import qualified Control.Monad.Random as CMR
 import Armor
 import Weapons
 import Shoes

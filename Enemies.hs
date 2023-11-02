@@ -17,6 +17,7 @@ module Enemies
   ,fireAmorload
   ,theGodKing
   ,deathless
+  ,kingGuarder
 ) where
 
 data Enemy = Enemy {
@@ -45,6 +46,8 @@ iceDragon = Enemy 1000 100 10 100 "Ice Dragon"
 
 darkload = Enemy 400 40 10 60 "Darkload"
 
+kingGuarder = Enemy 1000 80 10 50 "King Guarder"
+
 rice = Enemy 1000 70 10 30 "Rice"
 
 fireAmorload = Enemy 1000 100 10 100 "Fire Amorload"
@@ -52,6 +55,8 @@ fireAmorload = Enemy 1000 100 10 100 "Fire Amorload"
 theGodKing = Enemy 1500 100 10 100 "The God King"
 
 deathless = Enemy 1000 200 10 100 "Deathless"
+
+
 
 
 deductHealthFromEnemy::Enemy->Int->Enemy
