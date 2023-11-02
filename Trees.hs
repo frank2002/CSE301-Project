@@ -5,7 +5,22 @@ import Data.Maybe (catMaybes)
 import qualified Data.Tree as DT
 import Diagrams (D)
 
-data GTree = Node Int String [String] [GTree]
+import Armor
+import Weapons
+import Shoes
+import Enemies
+
+data NodeAttributes = NodeAttributes {
+  enemy :: Maybe Enemy,
+  armor :: Maybe Armor,
+  weapon :: Maybe Weapon,
+  shoes :: Maybe Shoe,
+  defeated :: Bool,
+  exit :: Bool
+} deriving (Show, Eq)
+
+
+data GTree = Node Int String NodeAttributes [GTree]
            | Leaf
            deriving (Eq)
 
@@ -18,7 +33,11 @@ data GTree = Node Int String [String] [GTree]
 
 -- Convert GTree to Tree String
 gTreeToTree :: GTree -> DT.Tree String
-gTreeToTree (Node n label strings children) = DT.Node (label ++  " " ++ show strings) (map gTreeToTree children)
+gTreeToTree (Node _ label attrs children) =
+    let status = case enemy attrs of
+                 Just _ -> if defeated attrs then " (Enemy Defeated)" else " (Enemy Here)"
+                 Nothing -> ""
+  in DT.Node (label ++ status) (map gTreeToTree children)
 gTreeToTree Leaf = DT.Node "Leaf" []
 
 -- gTreeToTreePos :: GTree -> GTree -> DT.Tree String
@@ -31,11 +50,12 @@ gTreeToTree Leaf = DT.Node "Leaf" []
 --   DT.Node (if Leaf == current then "Leaf <--you" else "Leaf") []
 
 gTreeToTreePos :: Int -> GTree -> DT.Tree String
-gTreeToTreePos current (Node n label strings children) =
-  let newLabel = if n == current
-                 then label ++ " " ++ show strings ++ " <--you are here!"
-                 else label ++ " " ++ show strings
-  in DT.Node newLabel (map (gTreeToTreePos current) children)
+gTreeToTreePos current (Node n label attrs children) =
+  let status = case enemy attrs of
+                 Just _ -> if defeated attrs then " (Enemy Defeated)" else " (Enemy Here)"
+                 Nothing -> ""
+      currentPosition = if n == current then " <--you are here!" else ""
+  in DT.Node (label ++ status ++ currentPosition) (map (gTreeToTreePos current) children)
 gTreeToTreePos _ Leaf = DT.Node "Leaf" []
 
 -- Print GTree
@@ -61,32 +81,25 @@ printVisitedTree tree current indices = case filterTree tree indices of
 -- Example Tree
 main :: IO ()
 main = do
-  let tree = Node 1 "root" ["a", "b"]
-              [ Node 2 "child1" ["c"] 
-                [ Node 6 "grandchild1" ["i"] []
-                , Node 7 "grandchild2" ["j"] 
-                  [ Node 11 "greatgrandchild1" ["m"] []
-                  , Node 12 "greatgrandchild2" ["n"] []
-                  ]
-                , Node 8 "grandchild3" ["k"] []
-                ]
-              , Node 3 "child2" ["d", "e"]
-                [ Node 4 "grandchild1" ["f"] 
-                  [ Node 9 "greatgrandchild1" ["l"] []
-                  ]
-                , Node 5 "grandchild2" ["g", "h"] 
-                  [ Node 10 "greatgrandchild1" ["o"] []
-                  ]
-                ]
-              , Node 13 "child3" ["p", "q"]
-                [ Node 14 "grandchild1" ["r"] []
-                , Node 15 "grandchild2" ["s"] []
-                ]
-              ]
-      visitedNodes = [1, 2,3,6,7,11,4,5,10]
+  let sampleTree = Node 1 "Entrance" (NodeAttributes Nothing (Just (armor_list !! 0)) Nothing Nothing False False)
+        [ Node 2 "Hallway" (NodeAttributes (Just goblin) (Just (armor_list !! 1)) (Just (weapon_list !! 0)) (Just (shoe_list !! 0)) True False)
+          [ Node 6 "Hidden Room" (NodeAttributes Nothing (Just (armor_list !! 2)) (Just (weapon_list !! 1)) (Just (shoe_list !! 1)) False False) []
+          , Node 7 "Guard Room" (NodeAttributes (Just parademon) (Just (armor_list !! 3)) (Just (weapon_list !! 2)) (Just (shoe_list !! 2)) False False)
+            [ Node 11 "Secret Vault" (NodeAttributes Nothing (Just (armor_list !! 4)) (Just (weapon_list !! 3)) (Just (shoe_list !! 0)) False False) []
+            , Node 12 "Armory" (NodeAttributes Nothing (Just (armor_list !! 5)) (Just (weapon_list !! 4)) (Just (shoe_list !! 2)) False False) []
+            ]
+          ]
+        , Node 3 "Treasure Room" (NodeAttributes Nothing (Just (armor_list !! 6)) (Just (weapon_list !! 5)) (Just (shoe_list !! 0)) False False) []
+        , Node 4 "Dungeon" (NodeAttributes (Just parademon) (Just (armor_list !! 7)) (Just (weapon_list !! 6)) (Just (shoe_list !! 1)) False False)
+          [ Node 8 "Torture Room" (NodeAttributes (Just goblin) (Just (armor_list !! 8)) (Just (weapon_list !! 7)) (Just (shoe_list !! 2)) False False) []
+          , Node 9 "Storage Room" (NodeAttributes Nothing (Just (armor_list !! 9)) (Just (weapon_list !! 8)) (Just (shoe_list !! 1)) False False) []
+          ]
+        , Node 5 "Exit" (NodeAttributes Nothing Nothing Nothing Nothing False True) []
+        ]
+      visitedNodes = [1, 2,3]
       current = 11
-  printVisitedTree tree current visitedNodes
-  printGTreePos tree current
+  printVisitedTree sampleTree current visitedNodes
+  printGTreePos sampleTree current
 
 -- main :: IO ()
 -- main = do

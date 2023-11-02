@@ -3,42 +3,34 @@ module Definition where
 import Data.List
 import Trees
 
+import Armor
+import Weapons
+import Shoes
+import Hero
+import Enemies
+
+
 
 
 -- The game tree defined here
-gameTree :: GTree
-gameTree = Node 1 "root" ["a", "b"]
-              [ Node 2 "child1" ["c"] 
-                [ Node 6 "grandchild1" ["i"] []
-                , Node 7 "grandchild2" ["j"] 
-                  [ Node 11 "greatgrandchild1" ["m"] []
-                  , Node 12 "greatgrandchild2" ["n"] []
-                  ]
-                , Node 8 "grandchild3" ["k"] []
-                ]
-              , Node 3 "child2" ["d", "e"]
-                [ Node 4 "grandchild1" ["f"] 
-                  [ Node 9 "greatgrandchild1" ["l"] []
-                  ]
-                , Node 5 "grandchild2" ["g", "h"] 
-                  [ Node 10 "greatgrandchild1" ["o"] []
-                  ]
-                ]
-              , Node 13 "child3" ["p", "q"]
-                [ Node 14 "grandchild1" ["r"] []
-                , Node 15 "grandchild2" ["s"] []
-                ]
-              ]
+sampleTree :: GTree
+sampleTree = Node 1 "Entrance" (NodeAttributes Nothing (Just (armor_list !! 0)) Nothing Nothing True False)
+        [ Node 2 "Hallway" (NodeAttributes (Just goblin) (Just (armor_list !! 1)) (Just (weapon_list !! 0)) (Just (shoe_list !! 0)) True False)
+          [ Node 6 "Hidden Room" (NodeAttributes Nothing (Just (armor_list !! 2)) (Just (weapon_list !! 1)) (Just (shoe_list !! 1)) True False) []
+          , Node 7 "Guard Room" (NodeAttributes (Just parademon) (Just (armor_list !! 3)) (Just (weapon_list !! 2)) (Just (shoe_list !! 2)) False False)
+            [ Node 11 "Secret Vault" (NodeAttributes Nothing (Just (armor_list !! 4)) (Just (weapon_list !! 3)) (Just (shoe_list !! 0)) False False) []
+            , Node 12 "Armory" (NodeAttributes Nothing (Just (armor_list !! 5)) (Just (weapon_list !! 4)) (Just (shoe_list !! 2)) False False) []
+            ]
+          ]
+        , Node 3 "Treasure Room" (NodeAttributes Nothing (Just (armor_list !! 6)) (Just (weapon_list !! 5)) (Just (shoe_list !! 0)) False False) []
+        , Node 4 "Dungeon" (NodeAttributes (Just parademon) (Just (armor_list !! 7)) (Just (weapon_list !! 6)) (Just (shoe_list !! 1)) False False)
+          [ Node 8 "Torture Room" (NodeAttributes (Just goblin) (Just (armor_list !! 8)) (Just (weapon_list !! 7)) (Just (shoe_list !! 2)) False False) []
+          , Node 9 "Storage Room" (NodeAttributes Nothing (Just (armor_list !! 9)) (Just (weapon_list !! 8)) (Just (shoe_list !! 1)) False False) []
+          ]
+        , Node 5 "Exit" (NodeAttributes Nothing Nothing Nothing Nothing False True) []
+        ]
               -- This is an example
 
--- Path of the character
-path :: [Int]
-path = [1] -- Start from root(Node 1)
-
--- Attributes of the character
--- defined here
-attributes :: [String]
-attributes = ["a", "b"] -- example
 
 
 -- Command accepted by the game
@@ -51,3 +43,23 @@ data Cmd = Go_Down | Go_Up | Battle | Search | Check | Quit
 -- Search -> Search the node (armor, weapon, shoes), if any
 -- Check -> Check the attributes of the enermy
 -- Quit -> Quit the game
+
+
+data GameState = GameState {
+  currentPos :: GTree,
+  path :: [Int],
+  hero :: Hero,
+  tree :: GTree,
+  win :: Bool
+}
+
+initialHero :: Hero
+initialHero = Hero {
+    baseHealthPoints = 1,
+    baseAttackPower = 0,
+    baseSpeed = 50,
+    baseDefense = 30,
+    currentWeapon = first_weapon,    -- Fists initially
+    currentArmor = first_armor,      -- No armor initially
+    currentShoes = first_shoe        -- No shoes initially
+}
