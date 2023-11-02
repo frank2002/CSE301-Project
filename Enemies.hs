@@ -3,6 +3,8 @@ module Enemies
   Enemy(..)
   ,deductHealthFromEnemy
   ,enemyIsDead
+  ,parademon
+  ,goblin
   ,displayInfoEnemy
 ) where
 
