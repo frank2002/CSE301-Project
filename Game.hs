@@ -88,35 +88,33 @@ fightEnemy hero enemy gen roundNumber = do
   else fightEnemy heroAfterAttack enemyAfterAttack gen'' (roundNumber + 1)
 
 -- Initial Hero
-initialHero :: Hero
-initialHero = Hero {
-    baseHealthPoints = 1,
-    baseAttackPower = 0,
-    baseSpeed = 50,
-    baseDefense = 30,
-    currentWeapon = first_weapon,    -- Fists initially
-    currentArmor = first_armor,      -- No armor initially
-    currentShoes = first_shoe        -- No shoes initially
-}
+-- initialHero :: Hero
+-- initialHero = Hero {
+--     baseHealthPoints = 1,
+--     baseAttackPower = 0,
+--     baseSpeed = 50,
+--     baseDefense = 30,
+--     currentWeapon = first_weapon,    -- Fists initially
+--     currentArmor = first_armor,      -- No armor initially
+--     currentShoes = first_shoe        -- No shoes initially
+-- }
 
-hero = initialHero
-goblin = Enemy 500 10 30 10 "Goblin"
-
+-- hero_initial = initialHero
 --------------------------------------------------------------------
 -- Testing part
 --------------------------------------------------------------------
 
 testHeroHitChance :: Float
-testHeroHitChance = heroHitChance hero goblin
+testHeroHitChance = heroHitChance initialHero goblin
 
 testEnemyHitChance :: Float
-testEnemyHitChance = enemyHitChance goblin hero
+testEnemyHitChance = enemyHitChance goblin initialHero
 
 testHeroHitDamage :: Int
-testHeroHitDamage = heroHitDamage hero goblin
+testHeroHitDamage = heroHitDamage initialHero goblin
 
 testEnemyHitDamage :: Int
-testEnemyHitDamage = enemyHitDamage goblin hero
+testEnemyHitDamage = enemyHitDamage goblin initialHero
 
 -- Test the generateWeaponHit function 100 times and count the number of True results
 testGenerateWeaponHit :: Float -> SR.StdGen -> (Int, SR.StdGen)
@@ -168,7 +166,7 @@ testdisplayInfoWeapon weapon = do
 --     print testEnemyHitDamage
 main = do
     gen <- SR.getStdGen
-    testFightEnemy hero goblin gen
+    testFightEnemy initialHero goblin gen
 --   let hitRate = 0.65  -- Assuming a hit rate of 50%
 --   let gen = SR.mkStdGen 42  -- Initialize the random number generator
 --   let (count, _) = testGenerateWeaponHit hitRate gen  -- Run the test

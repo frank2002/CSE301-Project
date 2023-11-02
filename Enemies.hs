@@ -6,6 +6,17 @@ module Enemies
   ,parademon
   ,goblin
   ,displayInfoEnemy
+  ,tinyMinotaur
+  ,apokoliptian
+  ,orc
+  ,largeMinotaur
+  ,minotaurKing
+  ,iceDragon
+  ,darkload
+  ,rice
+  ,fireAmorload
+  ,theGodKing
+  ,deathless
 ) where
 
 data Enemy = Enemy {
@@ -19,6 +30,29 @@ data Enemy = Enemy {
 parademon = Enemy 100 5 20 10 "Parademon"
 
 goblin = Enemy 50 10 30 10 "Goblin"
+
+tinyMinotaur = Enemy 100 20 10 10 "Tiny Minotaur"
+
+apokoliptian = Enemy 150 30 20 20 "Apokoliptian"
+
+orc = Enemy 200 40 20 30 "Orc"
+
+largeMinotaur = Enemy 400 50 10 60 "Large Minotaur"
+
+minotaurKing = Enemy 500 60 10 70 "Minotaur King"
+
+iceDragon = Enemy 1000 100 10 100 "Ice Dragon"
+
+darkload = Enemy 400 40 10 60 "Darkload"
+
+rice = Enemy 1000 70 10 30 "Rice"
+
+fireAmorload = Enemy 1000 100 10 100 "Fire Amorload"
+
+theGodKing = Enemy 1500 100 10 100 "The God King"
+
+deathless = Enemy 1000 200 10 100 "Deathless"
+
 
 deductHealthFromEnemy::Enemy->Int->Enemy
 deductHealthFromEnemy enemy deduction=Enemy ((healthPoints enemy)-deduction) (attackPower enemy) (speed enemy) (defense enemy) (name enemy)
