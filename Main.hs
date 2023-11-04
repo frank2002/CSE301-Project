@@ -203,7 +203,6 @@ handleCmd Search state@(GameState pos path hero tree win) = do
 
     case pos of
         Node _ _ attrs _ -> do
-            -- Ensure the node is defeated before searching
             if not (defeated attrs) then do
                 putStrLn "You cannot search the room until you defeat the enemy."
                 return state
@@ -216,12 +215,12 @@ handleCmd Search state@(GameState pos path hero tree win) = do
                     return state
                 else do
                     putStrLn "You found some equipment!"
-                    displayInfoEquipment hero  -- Display current equipment
+                    displayInfoEquipment hero  
                     heroAfterWeapon <- checkAndEquipWeapon attrs hero
                     heroAfterArmor <- checkAndEquipArmor attrs heroAfterWeapon
                     heroAfterShoes <- checkAndEquipShoes attrs heroAfterArmor
                     putStrLn "Updated Hero Information:"
-                    displayInfoEquipment heroAfterShoes  -- Display updated equipment
+                    displayInfoEquipment heroAfterShoes  
                     return state { hero = heroAfterShoes }
         Leaf -> do
             putStrLn "There is nothing to search for at a leaf."

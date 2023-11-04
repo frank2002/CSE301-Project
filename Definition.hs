@@ -58,7 +58,6 @@ sampleTree = Node 1 "Entrance" (NodeAttributes Nothing Nothing Nothing Nothing T
               
           ]
         ]
-              -- This is an example
 
 
 

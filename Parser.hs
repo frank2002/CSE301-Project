@@ -61,7 +61,6 @@ ordinal = do
 
 parseCmd :: Parser String Cmd
 parseCmd = parseMoveDown <|> parseMoveUp <|> parseBattle <|> parseSearch <|> parseCheck <|> parseQuit
--- parseCmd =  parseMoveUp <|> parseBattle <|> parseSearch <|> parseCheck <|> parseQuit
 
 
 parseMoveDown :: Parser String Cmd
