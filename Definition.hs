@@ -84,7 +84,7 @@ data GameState = GameState {
 
 initialHero :: Hero
 initialHero = Hero {
-    baseHealthPoints = 100,
+    baseHealthPoints = 10000,
     baseAttackPower = 10,
     baseSpeed = 50,
     baseDefense = 30,

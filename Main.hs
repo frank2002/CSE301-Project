@@ -14,11 +14,12 @@ import Data.List
 import System.IO ( hFlush, stdout )
 import Control.Concurrent (threadDelay)
 import System.Exit (exitSuccess)
-import Data.Maybe (listToMaybe, mapMaybe, isJust)
-import Control.Monad (forM_)
+import Data.Maybe (listToMaybe, mapMaybe, isJust, isNothing)
+import Control.Monad (forM_, when)
 import Text.Read (readMaybe)
 import System.Posix.Internals (puts)
 import qualified System.Random as SR
+import Control.Monad.RWS.Class (MonadState(put))
 
 
 
@@ -26,7 +27,32 @@ import qualified System.Random as SR
 repl :: IO ()
 repl = do
     putStrLn "Welcome to the game!\n"
-    putStrLn "You can use the following commands:" -- not complete
+    putStrLn "\t********************************"
+    putStrLn "\t********** Background **********"
+    putStrLn "\t********************************"
+    putStrLn "You are at the entrance (root) of an ancient tree-like maze."
+    putStrLn "There are some enemies in the maze. Try to defeat them!"
+    putStrLn "Do not forget to search for equipment to help you in your journey.\n"
+    putStrLn "\t********************************"
+    putStrLn "\t************ Rules *************"
+    putStrLn "\t********************************"
+    putStrLn "You can go down to the children nodes, go up to the parent node, battle the enemy, search for equipment, "
+    putStrLn "check the current status of you and your enemy, or quit the game."
+    putStrLn "You can only go down to a child node if the enemy in the current node is defeated."
+    putStrLn "You can only search for equipment if the enemy in the current node is defeated."
+    putStrLn "You will win if you find the exit.\n"
+    putStrLn "\t********************************"
+    putStrLn "\t******** Instructions **********"
+    putStrLn "\t********************************"
+    putStrLn "You can use the following commnads:"
+    putStrLn "1. <go down to the first child> / <go down to child one>: go down to the child node with the given number. "
+    putStrLn "2. <go up>: go up to the parent node."
+    putStrLn "3. <battle>: battle the enemy in the current node."
+    putStrLn "4. <search>: search for equipment in the current node."
+    putStrLn "5. <check>: check the current status of you and your enemy."
+    putStrLn "6. <quit>: quit the game.\n"
+    putStrLn "\t********************************"
+
     putStrLn "Let's start the game!\n\n"
     let initialState = GameState sampleTree [1] initialHero sampleTree False
     go initialState
@@ -36,7 +62,7 @@ repl = do
             case pos of
                 Leaf -> putStrLn "You see a leaf."
                 Node index name attrs children -> do
-                    putStrLn ""
+                    putStrLn "********************************"
                     putStrLn $ "You are in a room named " ++ name ++ "."
                     putStrLn "This is your current map:\n   "
                     printVisitedTree tree index path
@@ -45,6 +71,8 @@ repl = do
             putStr "> "
             hFlush stdout
             line <- getLine
+            
+            putStrLn "\n********************************"
             -- case readMaybe line of
                 -- Just 1 -> handleCmd Go_Down state >>= go
                 -- Just 2 -> handleCmd Go_Up state >>= go
@@ -60,53 +88,7 @@ repl = do
 
 handleCmd :: Cmd -> GameState -> IO GameState
 
--- handleCmd Go_Down state@(GameState pos path hero tree win) = do
---     case pos of
---         Node index _ attrs children -> do
---             if defeated attrs
---                 then do
---                     if null children
---                         then do
---                             putStrLn "You are at a leaf node. You cannot go down any further!\n"
---                             return state
---                         else do
---                             putStrLn "This node is defeated. You can proceed."
---                             displayChildren children
---                             choice <- getUserChoice (length children)
---                             case children !! (choice - 1) of 
---                                 Node index_child _ _ _ -> do
---                                     let newPath = path ++ [index_child]
---                                         newState = state { currentPos = children !! (choice - 1), path = newPath }
---                                     putStrLn "You have entered the room.\n"
---                                     return newState
---                 else do
---                     putStrLn "This node is not defeated yet. You only battle or go back to the parent!\n"
---                     return state
---         Leaf -> do
---             putStrLn "You are at a leaf node. You cannot go down any further.\n"
---             return state
---     where
---         displayChildren :: [GTree] -> IO ()
---         displayChildren children = do
---             putStrLn "There are following rooms you can go down:"
---             forM_ (zip [1..] children) $ \(i, Node _ label attrs _) -> do
---                 let status = if isJust (enemy attrs) && not (defeated attrs) then " (Enemy Here)" else ""
---                 putStrLn $ show i ++ ". " ++ label ++ status
---             putStrLn "Choose which room you want to enter:"
---             putStr "> "
---             hFlush stdout
-            
 
---         getUserChoice :: Int -> IO Int
---         getUserChoice n = do
---             input <- getLine
---             case readMaybe input of
---                 Just num | num > 0 && num <= n -> return num
---                 _ -> do
---                     putStrLn "Invalid choice. Please enter a number between 1 and n."
---                     putStr "> "
---                     hFlush stdout
---                     getUserChoice n
 
 
 handleCmd (Go_Down choice) state@(GameState pos path hero tree win) = do
@@ -122,11 +104,16 @@ handleCmd (Go_Down choice) state@(GameState pos path hero tree win) = do
                             then do
                                 let nextNode = children !! (choice - 1)
                                 case nextNode of 
-                                    Node index_child _ _ _ -> do
-                                        let newPath = path ++ [index_child]
-                                            newState = state { currentPos = nextNode, path = newPath }
-                                        putStrLn $ "You have entered the room: " ++ show choice ++ ".\n"
-                                        return newState
+                                    Node index_child _ attrs_child _  -> do
+                                        if exit attrs_child
+                                            then do
+                                                putStrLn "Congratulations! You have found the exit and won the game!\n"
+                                                exitSuccess
+                                            else do
+                                                let newPath = path ++ [index_child]
+                                                    newState = state { currentPos = nextNode, path = newPath }
+                                                putStrLn $ "You have entered the room: " ++ show choice ++ ".\n"
+                                                return newState
                                     Leaf -> do
                                         putStrLn "You have reached a leaf node.\n"
                                         return state
@@ -139,6 +126,7 @@ handleCmd (Go_Down choice) state@(GameState pos path hero tree win) = do
         Leaf -> do
             putStrLn "You are at a leaf node. You cannot go down any further.\n"
             return state
+
 
 
 handleCmd Go_Up state@(GameState pos path hero tree win) = do
@@ -221,14 +209,20 @@ handleCmd Search state@(GameState pos path hero tree win) = do
                 return state
             else do
                 putStrLn "Searching the room for equipment..."
-                displayInfoEquipment hero  -- Display current equipment
-                heroAfterWeapon <- checkAndEquipWeapon attrs hero
-                putStrLn "TEst"
-                heroAfterArmor <- checkAndEquipArmor attrs heroAfterWeapon
-                heroAfterShoes <- checkAndEquipShoes attrs heroAfterArmor
-                putStrLn "Updated Hero Information:"
-                displayInfoEquipment heroAfterShoes  -- Display updated equipment
-                return state { hero = heroAfterShoes }
+                let noEquipment = isNothing (weapon attrs) && isNothing (armor attrs) && isNothing (shoes attrs)
+                if noEquipment 
+                    then do
+                    putStrLn "Sorry, there are no equipments in this room."
+                    return state
+                else do
+                    putStrLn "You found some equipment!"
+                    displayInfoEquipment hero  -- Display current equipment
+                    heroAfterWeapon <- checkAndEquipWeapon attrs hero
+                    heroAfterArmor <- checkAndEquipArmor attrs heroAfterWeapon
+                    heroAfterShoes <- checkAndEquipShoes attrs heroAfterArmor
+                    putStrLn "Updated Hero Information:"
+                    displayInfoEquipment heroAfterShoes  -- Display updated equipment
+                    return state { hero = heroAfterShoes }
         Leaf -> do
             putStrLn "There is nothing to search for at a leaf."
             return state
@@ -271,7 +265,6 @@ handleCmd Search state@(GameState pos path hero tree win) = do
 
 
 handleCmd Check state@(GameState pos path hero tree win) = do
-    putStrLn ""
     putStrLn "Checking current status..."
     displayInfoHero hero
     putStrLn ""
