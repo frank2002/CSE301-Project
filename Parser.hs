@@ -1,6 +1,6 @@
 module Parser (runParser, parseCmd, parseInput) where
 
-import Cmd
+import Definition
 
 import Data.Maybe
 import Data.Char
@@ -61,14 +61,21 @@ ordinal = do
 
 parseCmd :: Parser String Cmd
 parseCmd = parseMoveDown <|> parseMoveUp <|> parseBattle <|> parseSearch <|> parseCheck <|> parseQuit
+-- parseCmd =  parseMoveUp <|> parseBattle <|> parseSearch <|> parseCheck <|> parseQuit
+
 
 parseMoveDown :: Parser String Cmd
 parseMoveDown = do
-  match "move" <|> match "go"
-  match "down"
-  match "to"
-  (match "child" >> n <- cardinal >> return (Go_Down n)) <|>
-  (match "the" >> n <- ordinal >> match "child" >> return (Go_Down n))
+  _ <- match "move" <|> match "go"
+  _ <- match "down"
+  _ <- match "to"
+  (do match "child"
+      n <- cardinal
+      return (Go_Down n)) <|>
+    (do match "the"
+        n <- ordinal
+        match "child"
+        return (Go_Down n))
 
 parseMoveUp :: Parser String Cmd
 parseMoveUp = do

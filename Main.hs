@@ -8,6 +8,7 @@ import Shoes
 import Hero
 import Game
 import Enemies
+import Parser
 
 import Data.List
 import System.IO ( hFlush, stdout )
@@ -44,22 +45,71 @@ repl = do
             putStr "> "
             hFlush stdout
             line <- getLine
-            case readMaybe line of
-                Just 1 -> handleCmd Go_Down state >>= go
-                Just 2 -> handleCmd Go_Up state >>= go
-                Just 3 -> handleCmd Battle state >>= go
-                Just 4 -> handleCmd Search state >>= go
-                Just 5 -> handleCmd Check state >>= go
-                Just 6 -> handleCmd Quit state >>= go
-            -- case parseInput parseCmd line of
-            --     Nothing -> do
-            --         putStrLn "I'm sorry, I do not understand."
-            --         go state
-            --     Just cmd -> handleCmd cmd state >>= go
+            -- case readMaybe line of
+                -- Just 1 -> handleCmd Go_Down state >>= go
+                -- Just 2 -> handleCmd Go_Up state >>= go
+                -- Just 3 -> handleCmd Battle state >>= go
+                -- Just 4 -> handleCmd Search state >>= go
+                -- Just 5 -> handleCmd Check state >>= go
+                -- Just 6 -> handleCmd Quit state >>= go
+            case parseInput parseCmd line of
+                Nothing -> do
+                    putStrLn "I'm sorry, I do not understand."
+                    go state
+                Just cmd -> handleCmd cmd state >>= go
 
 handleCmd :: Cmd -> GameState -> IO GameState
 
-handleCmd Go_Down state@(GameState pos path hero tree win) = do
+-- handleCmd Go_Down state@(GameState pos path hero tree win) = do
+--     case pos of
+--         Node index _ attrs children -> do
+--             if defeated attrs
+--                 then do
+--                     if null children
+--                         then do
+--                             putStrLn "You are at a leaf node. You cannot go down any further!\n"
+--                             return state
+--                         else do
+--                             putStrLn "This node is defeated. You can proceed."
+--                             displayChildren children
+--                             choice <- getUserChoice (length children)
+--                             case children !! (choice - 1) of 
+--                                 Node index_child _ _ _ -> do
+--                                     let newPath = path ++ [index_child]
+--                                         newState = state { currentPos = children !! (choice - 1), path = newPath }
+--                                     putStrLn "You have entered the room.\n"
+--                                     return newState
+--                 else do
+--                     putStrLn "This node is not defeated yet. You only battle or go back to the parent!\n"
+--                     return state
+--         Leaf -> do
+--             putStrLn "You are at a leaf node. You cannot go down any further.\n"
+--             return state
+--     where
+--         displayChildren :: [GTree] -> IO ()
+--         displayChildren children = do
+--             putStrLn "There are following rooms you can go down:"
+--             forM_ (zip [1..] children) $ \(i, Node _ label attrs _) -> do
+--                 let status = if isJust (enemy attrs) && not (defeated attrs) then " (Enemy Here)" else ""
+--                 putStrLn $ show i ++ ". " ++ label ++ status
+--             putStrLn "Choose which room you want to enter:"
+--             putStr "> "
+--             hFlush stdout
+            
+
+--         getUserChoice :: Int -> IO Int
+--         getUserChoice n = do
+--             input <- getLine
+--             case readMaybe input of
+--                 Just num | num > 0 && num <= n -> return num
+--                 _ -> do
+--                     putStrLn "Invalid choice. Please enter a number between 1 and n."
+--                     putStr "> "
+--                     hFlush stdout
+--                     getUserChoice n
+
+
+handleCmd (Go_Down choice) state@(GameState pos path hero tree win) = do
     case pos of
         Node index _ attrs children -> do
             if defeated attrs
@@ -68,44 +118,27 @@ handleCmd Go_Down state@(GameState pos path hero tree win) = do
                         then do
                             putStrLn "You are at a leaf node. You cannot go down any further!\n"
                             return state
-                        else do
-                            putStrLn "This node is defeated. You can proceed."
-                            displayChildren children
-                            choice <- getUserChoice (length children)
-                            case children !! (choice - 1) of 
-                                Node index_child _ _ _ -> do
-                                    let newPath = path ++ [index_child]
-                                        newState = state { currentPos = children !! (choice - 1), path = newPath }
-                                    putStrLn "You have entered the room.\n"
-                                    return newState
+                        else if choice > 0 && choice <= length children
+                            then do
+                                let nextNode = children !! (choice - 1)
+                                case nextNode of 
+                                    Node index_child _ _ _ -> do
+                                        let newPath = path ++ [index_child]
+                                            newState = state { currentPos = nextNode, path = newPath }
+                                        putStrLn $ "You have entered the room: " ++ show choice ++ ".\n"
+                                        return newState
+                                    Leaf -> do
+                                        putStrLn "You have reached a leaf node.\n"
+                                        return state
+                            else do
+                                putStrLn "Invalid room number. Please try again.\n"
+                                return state
                 else do
-                    putStrLn "This node is not defeated yet. You only battle or go back to the parent!\n"
+                    putStrLn "This node is not defeated yet. You can only battle or go back to the parent!\n"
                     return state
         Leaf -> do
             putStrLn "You are at a leaf node. You cannot go down any further.\n"
             return state
-    where
-        displayChildren :: [GTree] -> IO ()
-        displayChildren children = do
-            putStrLn "There are following rooms you can go down:"
-            forM_ (zip [1..] children) $ \(i, Node _ label attrs _) -> do
-                let status = if isJust (enemy attrs) && not (defeated attrs) then " (Enemy Here)" else ""
-                putStrLn $ show i ++ ". " ++ label ++ status
-            putStrLn "Choose which room you want to enter:"
-            putStr "> "
-            hFlush stdout
-            
-
-        getUserChoice :: Int -> IO Int
-        getUserChoice n = do
-            input <- getLine
-            case readMaybe input of
-                Just num | num > 0 && num <= n -> return num
-                _ -> do
-                    putStrLn "Invalid choice. Please enter a number between 1 and n."
-                    putStr "> "
-                    hFlush stdout
-                    getUserChoice n
 
 
 handleCmd Go_Up state@(GameState pos path hero tree win) = do

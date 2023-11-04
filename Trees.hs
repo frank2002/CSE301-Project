@@ -40,22 +40,15 @@ gTreeToTree (Node _ label attrs children) =
   in DT.Node (label ++ status) (map gTreeToTree children)
 gTreeToTree Leaf = DT.Node "Leaf" []
 
--- gTreeToTreePos :: GTree -> GTree -> DT.Tree String
--- gTreeToTreePos current (Node n label strings children) =
---   let newLabel = if Node n label strings children == current
---                  then label ++  " " ++ show strings ++ " <--you are here!"
---                  else label ++  " " ++ show strings
---   in DT.Node newLabel (map (gTreeToTreePos current) children)
--- gTreeToTreePos current Leaf =
---   DT.Node (if Leaf == current then "Leaf <--you" else "Leaf") []
 
 gTreeToTreePos :: Int -> GTree -> DT.Tree String
 gTreeToTreePos current (Node n label attrs children) =
   let status = case enemy attrs of
-                 Just _ -> if defeated attrs then " (Enemy Defeated)" else " (Enemy Here)"
+                 Just _ -> if defeated attrs then " (Enemy Defeated)" else " (Enemy Here!)"
                  Nothing -> ""
-      currentPosition = if n == current then " <--you are here!" else ""
-  in DT.Node (label ++ status ++ currentPosition) (map (gTreeToTreePos current) children)
+      currentPosition = if n == current then " <--- you are here!" else ""
+      childrenTrees = map (gTreeToTreePos current) children
+  in DT.Node (label ++ status ++ currentPosition) childrenTrees
 gTreeToTreePos _ Leaf = DT.Node "Leaf" []
 
 -- Print GTree
@@ -67,10 +60,16 @@ printGTreePos tree current = putStrLn . DT.drawTree $ gTreeToTreePos current tre
 
 
 filterTree :: GTree -> [Int] -> Maybe GTree
-filterTree (Node n label strings children) indices
-  | n `elem` indices = Just $ Node n label strings (catMaybes $ map (`filterTree` indices) children)
+filterTree (Node n label attrs children) indices
+  | n `elem` indices = Just $ Node n label attrs (catMaybes $ map (markUnseen indices) children)
   | otherwise = Nothing
 filterTree Leaf _ = Just Leaf
+
+markUnseen :: [Int] -> GTree -> Maybe GTree
+markUnseen visited (Node n label attrs children)
+  | n `notElem` visited = Just $ Node n (label ++ " (Unexplored)") attrs []
+  | otherwise = Just $ Node n label attrs (catMaybes $ map (markUnseen visited) children)
+markUnseen _ Leaf = Just Leaf
 
 printVisitedTree :: GTree -> Int -> [Int] -> IO ()
 printVisitedTree tree current indices = case filterTree tree indices of

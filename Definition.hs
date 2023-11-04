@@ -63,8 +63,8 @@ sampleTree = Node 1 "Entrance" (NodeAttributes Nothing Nothing Nothing Nothing T
 
 
 -- Command accepted by the game
-data Cmd = Go_Down | Go_Up | Battle | Search | Check | Quit
-  deriving (Show,Read)
+data Cmd = Go_Down Int | Go_Up | Battle | Search | Check | Quit
+  deriving (Show, Read)
 
 -- Go_Down -> Go down to the one child of current node
 -- Go_Up -> Go up to the parent of current node
