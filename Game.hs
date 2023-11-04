@@ -166,9 +166,9 @@ testdisplayInfoWeapon weapon = do
 --     print testEnemyHitChance
 --     print testHeroHitDamage
 --     print testEnemyHitDamage
-main = do
-    gen <- SR.getStdGen
-    testFightEnemy initialHero goblin gen
+-- main = do
+--     gen <- SR.getStdGen
+--     testFightEnemy initialHero goblin gen
 --   let hitRate = 0.65  -- Assuming a hit rate of 50%
 --   let gen = SR.mkStdGen 42  -- Initialize the random number generator
 --   let (count, _) = testGenerateWeaponHit hitRate gen  -- Run the test
