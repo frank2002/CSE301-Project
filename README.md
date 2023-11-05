@@ -92,7 +92,35 @@ $$
 \text{Damage} = \frac{100 * \text{Attack Power}}{100 + \text{opponents' Defense}}
 $$
 
-### 3. Command System and Maps
+### 3. Tree system and ploting
+We define the tree as the following 
+```haskell
+data GTree = Node Int String NodeAttributes [GTree]
+  | Leaf
+  deriving (Eq)
+
+data NodeAttributes = NodeAttributes
+  { enemy    :: Maybe Enemy
+  , armor    :: Maybe Armor
+  , weapon   :: Maybe Weapon
+  , shoes    :: Maybe Shoe
+  , defeated :: Bool
+  , exit     :: Bool
+  } deriving (Show, Eq)
+```
+The tree is composed of four parts: 
+1. Node label: This is important for searching the label
+2. Node name: This can help to display important information on the map.
+3. Node attributes: This stores all the important gaming information in this data type.
+4. Children: Storing all the children. Empty list => Leaf Node
+
+```haskell
+printVisitedTree :: GTree -> Int -> [Int] -> IO ()
+```
+We also have the plotting functions to partially plot the map. This enables the user to see the map clearly while playing while having the fog system.
+
+
+### 4. Command System and Maps
 We have design the [**Fog of War**](https://en.wikipedia.org/wiki/Fog_of_war) system of the map. The map displays information about places explored and areas that are in the player's immediate vicinity, such as the following example:
 ```
 Entrance
