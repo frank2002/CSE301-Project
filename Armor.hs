@@ -12,27 +12,27 @@ data Armor = Armor
   , armorName        :: String
   } deriving (Show, Eq)
 
-first_armor = Armor 5 5 5 "Default Armor"
+first_armor = Armor 5 20 5 "Default Armor"
 
-iron_armor = Armor 7 12 18 "Iron Armor"
+iron_armor = Armor 7 32 18 "Iron Armor"
 
-steel_armor = Armor 11 23 28 "Steel Armor"
+steel_armor = Armor 14 53 28 "Steel Armor"
 
-mithril_armor = Armor 14 27 33 "Mithril Armor"
+mithril_armor = Armor 19 67 33 "Mithril Armor"
 
-dragon_scale = Armor 22 38 42 "Dragon Scale Armor"
+dragon_scale = Armor 26 78 42 "Dragon Scale Armor"
 
-shadow_cloak = Armor 26 47 52 "Shadow Cloak"
+shadow_cloak = Armor 35 87 52 "Shadow Cloak"
 
-celestial_plate = Armor 29 64 68 "Celestial Plate"
+celestial_plate = Armor 49 104 68 "Celestial Plate"
 
-demon_hide = Armor 33 73 78 "Demon Hide Armor"
+demon_hide = Armor 53 133 78 "Demon Hide Armor"
 
-guardian_mail = Armor 39 82 88 "Guardian Mail"
+guardian_mail = Armor 69 182 88 "Guardian Mail"
 
-aegis_shield = Armor 44 91 97 "Aegis Shield"
+aegis_shield = Armor 74 201 97 "Aegis Shield"
 
-titanium_vest = Armor 49 103 108 "Titanium Vest"
+titanium_vest = Armor 99 253 108 "Titanium Vest"
 
 armor_list =
   [ iron_armor

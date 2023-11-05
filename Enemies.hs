@@ -27,7 +27,7 @@ data Enemy = Enemy
   , name         :: String
   } deriving (Show, Eq)
 
-parademon = Enemy 100 15 20 10 "Parademon"
+parademon = Enemy 100 5 20 10 "Parademon"
 
 goblin = Enemy 50 10 30 10 "Goblin"
 
@@ -51,7 +51,7 @@ rice = Enemy 600 60 10 30 "Rice"
 
 fireAmorload = Enemy 1000 30 10 50 "Fire Amorload"
 
-theGodKing = Enemy 1500 70 10 60 "The God King"
+theGodKing = Enemy 1000 70 10 20 "The God King"
 
 deathless = Enemy 500 100 10 40 "Deathless"
 

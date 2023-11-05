@@ -65,7 +65,7 @@ totalDefense hero =
 -- Function to deduct health from the hero
 deductHealth :: Hero -> Int -> Hero
 deductHealth hero deduction =
-  hero {baseHealthPoints = (totalHealthPoints hero) - deduction}
+  hero {baseHealthPoints = (baseHealthPoints hero) - deduction}
 
 
 -- Function to add health to the hero, if the player wins the battle
