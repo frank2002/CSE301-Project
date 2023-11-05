@@ -4,6 +4,7 @@ module Hero
   , Armor(..)
   , Shoe(..)
   , deductHealth
+  , setHealth
   , changeWeapon
   , changeArmor
   , changeShoes
@@ -67,6 +68,11 @@ deductHealth hero deduction =
   hero {baseHealthPoints = (totalHealthPoints hero) - deduction}
 
 
+-- Function to add health to the hero, if the player wins the battle
+setHealth :: Hero -> Int -> Hero
+setHealth hero newHealth = hero {baseHealthPoints = newHealth}
+
+
 -- Function to change the hero's weapon
 changeWeapon :: Hero -> Weapon -> Hero
 changeWeapon hero newWeapon = hero {currentWeapon = newWeapon}
@@ -102,6 +108,9 @@ displayInfoHero hero = do
         ++ show (totalSpeed hero)
         ++ ", Defense: "
         ++ show (totalDefense hero)
+  displayInfoWeapon (currentWeapon hero)
+  displayInfoArmor (currentArmor hero)
+  displayInfoShoe (currentShoes hero)
   putStrLn "--------------------------------------------------------------"
 
 

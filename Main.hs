@@ -166,7 +166,7 @@ handleCmd Battle state@(GameState pos path hero tree win) = do
           putStrLn "You have defeated the enemy!"
           putStrLn "You can search and continue your journey.\n"
           let newState = updateNodeAsDefeated pos state
-          return newState {hero = newHero}
+          return newState {hero}
     Node _ _ (NodeAttributes (Just _) _ _ _ True _) _ -> do
       putStrLn "This enemy has already been defeated."
       return state
