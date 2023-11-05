@@ -92,7 +92,7 @@ heroIsDead hero = (totalHealthPoints hero) <= 0
 --------------------------------------------------------------------
 displayInfoHero :: Hero -> IO ()
 displayInfoHero hero = do
-  putStrLn $ "------------------------- Hero Stats -------------------------"
+  putStrLn "------------------------- Hero Stats -------------------------"
   putStrLn
     $ "Attack Power: "
         ++ show (totalAttackPower hero)
@@ -102,6 +102,7 @@ displayInfoHero hero = do
         ++ show (totalSpeed hero)
         ++ ", Defense: "
         ++ show (totalDefense hero)
+  putStrLn "--------------------------------------------------------------"
 
 
 --------------------------------------------------------------------
@@ -109,8 +110,7 @@ displayInfoHero hero = do
 --------------------------------------------------------------------
 displayInfoEquipment :: Hero -> IO ()
 displayInfoEquipment hero = do
-  putStrLn
-    $ "------------------------- Hero Equipment -------------------------"
+  putStrLn "------------------------- Hero Equipment -------------------------"
   putStrLn
     $ "Weapon: "
         ++ weaponName (currentWeapon hero)
@@ -118,3 +118,8 @@ displayInfoEquipment hero = do
         ++ armorName (currentArmor hero)
         ++ ", Shoes: "
         ++ shoeName (currentShoes hero)
+  -- Call the functions to display the information of the weapon, armor, and shoes
+  displayInfoWeapon (currentWeapon hero)
+  displayInfoArmor (currentArmor hero)
+  displayInfoShoe (currentShoes hero)
+  putStrLn "------------------------------------------------------------------"

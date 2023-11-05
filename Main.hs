@@ -25,12 +25,14 @@ import           Text.Read               (readMaybe)
 -- Main loop
 repl :: IO ()
 repl = do
-  putStrLn "Welcome to the game!\n"
+  putStrLn "Welcome to the game Infinite Blade!\n"
   putStrLn "\t****************************************************"
   putStrLn "\t******************** Background ********************"
   putStrLn "\t****************************************************"
   putStrLn "\nYou are at the entrance (root) of an ancient tree-like maze."
   putStrLn "There are some enemies in the maze. Try to defeat them!"
+  putStrLn
+    "You need to find the exit of this ruined castle, defeat the deathless, and get the Infinity Blade to win the game.\n"
   putStrLn
     "Do not forget to search for equipment to help you in your journey.\n"
   putStrLn "\t****************************************************"
