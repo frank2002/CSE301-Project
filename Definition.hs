@@ -267,8 +267,8 @@ data GameState = GameState
 initialHero :: Hero
 initialHero =
   Hero
-    { baseHealthPoints = 10000
-    , baseAttackPower = 10
+    { baseHealthPoints = 100
+    , baseAttackPower = 30
     , baseSpeed = 50
     , baseDefense = 30
     , currentWeapon = first_weapon -- Fists initially

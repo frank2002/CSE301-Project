@@ -35,25 +35,25 @@ tinyMinotaur = Enemy 100 20 10 10 "Tiny Minotaur"
 
 apokoliptian = Enemy 150 30 20 20 "Apokoliptian"
 
-orc = Enemy 200 40 20 30 "Orc"
+orc = Enemy 150 40 20 30 "Orc"
 
-largeMinotaur = Enemy 400 50 10 60 "Large Minotaur"
+largeMinotaur = Enemy 300 45 10 60 "Large Minotaur"
 
-minotaurKing = Enemy 500 60 10 70 "Minotaur King"
+minotaurKing = Enemy 400 50 10 70 "Minotaur King"
 
-iceDragon = Enemy 1000 100 10 100 "Ice Dragon"
+iceDragon = Enemy 1000 40 10 100 "Ice Dragon"
 
 darkload = Enemy 400 40 10 60 "Darkload"
 
-kingGuarder = Enemy 1000 80 10 50 "King Guarder"
+kingGuarder = Enemy 500 50 10 50 "King Guarder"
 
-rice = Enemy 1000 70 10 30 "Rice"
+rice = Enemy 600 60 10 30 "Rice"
 
-fireAmorload = Enemy 1000 100 10 100 "Fire Amorload"
+fireAmorload = Enemy 1000 30 10 400 "Fire Amorload"
 
-theGodKing = Enemy 1500 100 10 100 "The God King"
+theGodKing = Enemy 1500 70 10 500 "The God King"
 
-deathless = Enemy 1000 200 10 100 "Deathless"
+deathless = Enemy 500 100 10 40 "Deathless"
 
 deductHealthFromEnemy :: Enemy -> Int -> Enemy
 deductHealthFromEnemy enemy deduction =
