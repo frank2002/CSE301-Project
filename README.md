@@ -23,6 +23,7 @@ In the primary portion of **Infinity Blade**, the player character travels a tre
 There are Three ways to play the game:
 1. Download the binary file we provided [here](https://github.com/frank2002/CSE301-Project/releases) and run it on your laptop. (for linux)
    ```bash
+   chmod +x InfinityBlade-linux-amd64
    ./InfinityBlade-linux-amd64
    ```
 
