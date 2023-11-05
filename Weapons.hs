@@ -1,12 +1,15 @@
 module Weapons
-(
-  Weapon(..)
-  ,first_weapon
-  ,weapon_list
-  ,displayInfoWeapon
-) where
+  ( Weapon(..)
+  , first_weapon
+  , weapon_list
+  , displayInfoWeapon
+  ) where
 
-data Weapon = Weapon {weaponDamage:: Int,weaponHitChance :: Float, weaponName :: String } deriving (Show,Eq)
+data Weapon = Weapon
+  { weaponDamage    :: Int
+  , weaponHitChance :: Float
+  , weaponName      :: String
+  } deriving (Show, Eq)
 
 first_weapon = Weapon 5 0.6 "Default Weapon"
 
@@ -30,11 +33,30 @@ excalibur = Weapon 100 0.9 "Excalibur"
 
 infinity_blade = Weapon 130 1.0 "Infinity Blade"
 
-weapon_list = [steel_sword, dawn_blade, marrow, unfaithful, echo, soul, randor, grayson, excalibur, infinity_blade]
+weapon_list =
+  [ steel_sword
+  , dawn_blade
+  , marrow
+  , unfaithful
+  , echo
+  , soul
+  , randor
+  , grayson
+  , excalibur
+  , infinity_blade
+  ]
+
 
 --------------------------------------------------------------------
 -- Display information of Weapon
 --------------------------------------------------------------------
 displayInfoWeapon :: Weapon -> IO ()
 displayInfoWeapon weapon = do
-    putStrLn $ "{" ++ show (weaponName weapon) ++ ": Damage: " ++ show (weaponDamage weapon) ++ ", Hit Chance: " ++ show (weaponHitChance weapon) ++ "}"
+  putStrLn
+    $ "{"
+        ++ show (weaponName weapon)
+        ++ ": Damage: "
+        ++ show (weaponDamage weapon)
+        ++ ", Hit Chance: "
+        ++ show (weaponHitChance weapon)
+        ++ "}"

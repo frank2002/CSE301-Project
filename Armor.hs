@@ -1,12 +1,16 @@
 module Armor
-(
-  Armor(..)
-  ,first_armor
-  ,armor_list
-  ,displayInfoArmor
-) where
+  ( Armor(..)
+  , first_armor
+  , armor_list
+  , displayInfoArmor
+  ) where
 
-data Armor = Armor {armorAttackBonus :: Int, armorHealthBonus :: Int, armorDefense :: Int, armorName :: String } deriving (Show,Eq)
+data Armor = Armor
+  { armorAttackBonus :: Int
+  , armorHealthBonus :: Int
+  , armorDefense     :: Int
+  , armorName        :: String
+  } deriving (Show, Eq)
 
 first_armor = Armor 5 5 5 "Default Armor"
 
@@ -30,11 +34,32 @@ aegis_shield = Armor 44 91 97 "Aegis Shield"
 
 titanium_vest = Armor 49 103 108 "Titanium Vest"
 
-armor_list = [iron_armor, steel_armor, mithril_armor, dragon_scale, shadow_cloak, celestial_plate, demon_hide, guardian_mail, aegis_shield, titanium_vest]
+armor_list =
+  [ iron_armor
+  , steel_armor
+  , mithril_armor
+  , dragon_scale
+  , shadow_cloak
+  , celestial_plate
+  , demon_hide
+  , guardian_mail
+  , aegis_shield
+  , titanium_vest
+  ]
+
 
 --------------------------------------------------------------------
 -- Display information of Armor
 --------------------------------------------------------------------
 displayInfoArmor :: Armor -> IO ()
 displayInfoArmor armor = do
-    putStrLn $ "{" ++ show (armorName armor) ++ ": Attack Bonus: " ++ show (armorAttackBonus armor) ++ ", Health Bonus: " ++ show (armorHealthBonus armor) ++ ", Defense: " ++ show (armorDefense armor) ++ "}"
+  putStrLn
+    $ "{"
+        ++ show (armorName armor)
+        ++ ": Attack Bonus: "
+        ++ show (armorAttackBonus armor)
+        ++ ", Health Bonus: "
+        ++ show (armorHealthBonus armor)
+        ++ ", Defense: "
+        ++ show (armorDefense armor)
+        ++ "}"
