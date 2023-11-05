@@ -20,19 +20,27 @@ In the primary portion of **Infinity Blade**, the player character travels a tre
 
 ### How to Play
 ---
-There are two ways to play the game:
-```bash
-# 1. Run the program with GHC with the binary file we provided
-cd dictionary_on_your_laptop   # change the path to the dictionary where you put the binary file
-./main
-```
-Or you can run the program with GHCi:
-```bash
-$ ghci
-GHCi, version 9.6.2: https://www.haskell.org/ghc/  :? for help
-Prelude> :l Main
-Prelude> main
-```
+There are Three ways to play the game:
+1. Download the binary file we provided [here](https://github.com/frank2002/CSE301-Project/releases) and run it on your laptop. (for linux)
+   ```bash
+   ./InfinityBlade-linux-amd64
+   ```
+
+2. Manually build from source
+    ```bash
+    git clone https://github.com/frank2002/CSE301-Project.git
+    cd CSE301-Project
+    ghc Main.hs -o main
+    ./main
+    ``` 
+
+3. Or you can run the program with GHCi:
+    ```bash
+    $ ghci
+    GHCi, version 9.6.2: https://www.haskell.org/ghc/  :? for help
+    Prelude> :l Main
+    Prelude> main
+    ```
 
 ## GamePlay
 ### 1. Numerical System
