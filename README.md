@@ -10,7 +10,7 @@ This is a project for CSE301 - Functional Programming course at Ecole Polytechni
 
 [Yubo Cai](https://github.com/yubocai-poly) - Data structure design (*Hero, Equipment, Enemy*), Battle system, front-end design.
 
-[He Yang](https://github.com/yhecb) - Parser.
+[Yang He](https://github.com/yhecb) - Parser.
 
 ### Game Description
 
@@ -144,7 +144,7 @@ Entrance
 ```
 We convert natural language into commands via the Parser program. Here are the commands we support:
 
-1. `go down to child one/two/three` - go down to the first/second/third child of the current node.
+1. `go down to child one/two/three`/`go down to the first/second/third child` - go down to the first/second/third child of the current node.
 
 2. `go up` - go up to the parent of the current node.
 
@@ -154,4 +154,4 @@ We convert natural language into commands via the Parser program. Here are the c
 
 5. `battle` - battle the enemy in the current node.
 
-6. `quit` - quit the game.
+6. `quit`/`q` - quit the game.
